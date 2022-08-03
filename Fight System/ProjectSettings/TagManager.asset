@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Quest
   layers:
   - Default
   - TransparentFX
@@ -49,4 +50,7 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 157883865
+    locked: 0
+  - name: Player
+    uniqueID: 611862807
     locked: 0

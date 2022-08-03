@@ -42,6 +42,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -256,6 +257,13 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      kubiki_4: 8963738994789639482
+      kubiki_5: 7297308252619326251
+      kubiki_0: 7109690005474118647
+      kubiki_2: -6782775649918172506
+      kubiki_3: -3949011413702614827
+      kubiki_1: -4868681982877466024
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

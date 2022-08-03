@@ -5,7 +5,7 @@ using TMPro;
 
 public class Quest : MonoBehaviour
 {
-    public Image questItem;
+    [HideInInspector] public Image questItem;
 
     public Color completedColor;
     public Color activeColor;
@@ -18,8 +18,12 @@ public class Quest : MonoBehaviour
     public bool isActive = false;
     public bool isEnd = false;
 
+    private QuestManager questManager;
+
     private void Start()
     {
+        questManager = GameObject.Find("QuestManger").GetComponent<QuestManager>();
+
         allQuest = FindObjectsOfType<Quest>();
         currentColor = questItem.color;
     }
@@ -41,8 +45,8 @@ public class Quest : MonoBehaviour
 
     public void OnQuestClick()
     {
-        arrow.gameObject.SetActive(true);
-        collectionQuest.ArrowDirection();
+        //arrow.gameObject.SetActive(true);
+        //collectionQuest.ArrowDirection();
         foreach (Quest quest in allQuest)
         {
             quest.questItem.color = quest.currentColor;
@@ -56,44 +60,59 @@ public class Quest : MonoBehaviour
 [System.Serializable]
 public class CollectionQuest
 {
-    [SerializeField] private GameObject questObj;
+    [SerializeField] private QuestManager questManagerScripts;
 
     [SerializeField] private string descriptions;
-    [SerializeField] private int countItems;
-    [SerializeField] private Quest questManager;
+    [SerializeField] private Quest questNPC;
     [SerializeField] private Transform[] itemList;
+
+    [HideInInspector] public GameObject questObj;
     public bool active;
 
-    public QuestArrow arrow;
+    public int currentItems;
+    private int countItems;
 
-    [SerializeField]
-    public int currentItems = 0;
-
+    [HideInInspector] public string mainText;
     public void StartCollectQuest()
     {
-        active = true;
+        if (!active)
+        {
+            questObj = questManagerScripts.SetItemQuest();
 
-        questManager.questItem = this.questObj.GetComponent<Image>();
+            currentItems = 0;
+            countItems = itemList.Length;
 
-        questObj.transform.GetChild(0).GetComponent<Text>().text = descriptions + "\n" + currentItems + " | " + countItems;
+            active = true;
 
-        questObj.SetActive(true);
+            questNPC.questItem = this.questObj.GetComponent<Image>();
+
+            mainText = descriptions + " " + currentItems + " | " + countItems;
+            questObj.transform.GetChild(0).GetComponent<Text>().text = mainText;
+
+            questObj.GetComponent<Button>().onClick.AddListener(() => OnClickButtonQuest());
+            questObj.SetActive(true);
+            QuestManager.questIsActive[questObj.name] = true;
+        }
     }
 
-    public void ArrowDirection()
+    public void OnClickButtonQuest()
     {
-        arrow.target = itemList[currentItems];
+        questManagerScripts.ChangeQuestMainObj(questObj);
     }
+
+    //public void ArrowDirection()
+    //{
+    //    arrow.target = itemList[currentItems];
+    //}
 
     public void CountItems()
     {
-        Debug.Log(currentItems);
-
-        questObj.transform.GetChild(0).GetComponent<Text>().text = descriptions + "\n" + currentItems + " | " + countItems;
+        mainText = descriptions + " " + currentItems + " | " + countItems;
+        questObj.transform.GetChild(0).GetComponent<Text>().text = mainText;
 
         if (currentItems == countItems)
         {
-            questManager.FinishQuest();
+            questNPC.FinishQuest();
         }
     }
 

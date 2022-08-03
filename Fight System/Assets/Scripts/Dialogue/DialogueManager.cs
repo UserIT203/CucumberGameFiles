@@ -18,6 +18,10 @@ public class DialogueManager : MonoBehaviour
     private int activeMessage;
     public static bool isActive = false;
 
+    [Range(0f, 10.0f)]
+    public float timeToScip;
+    private float timerToScip;
+
     public Enemy enemyAttacked;
     public Quest npcQuest;
 
@@ -42,6 +46,8 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayMessage()
     {
+        timerToScip = 0f;
+
         dynamic messageToDisplay;
         if (npcQuest == null || !npcQuest.isEnd)
             messageToDisplay = currentMessages[activeMessage];
@@ -94,8 +100,9 @@ public class DialogueManager : MonoBehaviour
             isActive = false;
             backgroundBox.LeanScale(Vector3.zero, 0.5f).setEaseInOutExpo();//закрытие окна диалога
 
-            if (enemyAttacked != null)
+            if (enemyAttacked != null) {
                 enemyAttacked.Fight();
+            }
 
             if (npcQuest != null)
                 npcQuest.StartQuest();
@@ -111,12 +118,19 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.touchCount > 0 && isActive)
+        if (Input.GetKeyDown(KeyCode.Space) && timerToScip >= timeToScip && isActive)
+            NextMessage();
+        else
+            timerToScip += Time.deltaTime;
+
+        if (Input.touchCount > 0 && isActive && timerToScip >= timeToScip && isActive)
         {
             Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began && isActive)
+            if (touch.phase == TouchPhase.Began)
                 NextMessage();
         }
+        else
+            timerToScip += Time.deltaTime;
     }
 }
 

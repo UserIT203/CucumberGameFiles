@@ -39,7 +39,8 @@ public class ButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void ActivateButton()
     {
-        if (battleSystem.isFreezePlayer)
+        if (battleSystem.isFreezePlayer || battleSystem.state == BattleState.WON 
+            || battleSystem.state == BattleState.LOST)
             return;
 
         if (scoreSumm > attackSystem.summ)
